@@ -16,12 +16,11 @@ import csv
 import glob
 
 
-##
+## create a lists to store candidate values and total votes for each candidate
 candidates_list = []
 votes_list = []
-candidate_dict= {'candidates': candidates_list, 'votes': votes_list}
 
-## change directories to
+## change directories to raw files
 os.chdir('raw_data')
 
 for csvpath in glob.glob('*.csv'):
@@ -34,15 +33,32 @@ for csvpath in glob.glob('*.csv'):
             voter_id = row[0]
             country = row[1]
             candidate = row[2]
+            ## if candidate is in list, add one vote for that candidate
             if candidate in candidates_list:
                 candidate_position = candidates_list.index(candidate)
                 votes_list[candidate_position] += 1
+            ## if candidate is not in list, add candidate to list and give them one vote
             else:
                 candidates_list.append(candidate)
                 votes_list.append(1)
 
-##       print(candidates_list)
-##       print(votes_list)
-##       print(sum(votes_list))
 
+## sum up total votes
+total_votes = sum(votes_list)
+## find winner
+max_votes = max(votes_list)
+winner_position = votes_list.index(max_votes)
+winner = candidates_list[winner_position]
+## print results
+print('Election Results')
+print('-------------------------')
+print('Total Votes: %i' % (total_votes))
+print('-------------------------')
 for candidate in candidates_list:
+    candidate_position = candidates_list.index(candidate)
+    candidate_votes = votes_list[candidate_position]
+    candidate_vote_perc = candidate_votes/total_votes * 100
+    print('%s: %.1f%s (%i)' % (candidate, candidate_vote_perc, '%', candidate_votes))
+print('-------------------------')
+print('Winner: %s' % (winner))
+print('-------------------------')
