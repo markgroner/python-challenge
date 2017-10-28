@@ -116,4 +116,6 @@ for State in employee_df['State']:
 ## switch out the old DOB for the new list
 employee_df['State'] = state_abbr_list
 
-print(employee_df)
+## save the new data to reformatted_employee_data.csv
+savepath = os.path.join('..', 'reformatted_employee_data.csv')
+employee_df.to_csv(savepath, index=False)
